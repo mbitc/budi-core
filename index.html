@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Budi-Core · Honest Conflict Crystallization</title>
+<style>
+  :root {
+    --bg:#0f0f0f; --surface:#1a1a1a; --surface2:#232323;
+    --text:#e0e0e0; --text-dim:#888;
+    --accent:#9dd2ff; --positive:#50e389; --error:#ff4c45; --warning:#f5d77f;
+    --flat:#82c7ff; --lifecycle:#50e389; --graph:#d9ceff; --border:#2d2f38;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:16px;min-height:100vh}
+  .widget{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+  .header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  h1{font-size:17px;font-weight:500}
+  .subtitle{font-size:11px;color:var(--text-dim);margin-top:2px}
+  .controls{display:flex;gap:5px;flex-wrap:wrap}
+  button{background:var(--surface2);color:var(--text);border:1px solid var(--border);
+    padding:6px 12px;border-radius:16px;font-size:12px;cursor:pointer;font-family:inherit;transition:0.15s}
+  button:hover{background:#2a2a2a}
+  button.active{background:var(--accent);color:#000;border-color:transparent}
+  button.primary{background:var(--accent);color:#000;border-color:transparent}
+  button:disabled{opacity:0.35;cursor:not-allowed}
+  .panel{background:var(--surface);border-radius:10px;padding:12px}
+  .panel-title{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;
+    margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+  .panel-title-badge{font-size:9px;padding:2px 8px;border-radius:8px;background:var(--surface2);font-family:monospace}
+  .panel-title-badge.flat{color:var(--flat)} .panel-title-badge.lifecycle{color:var(--lifecycle)} .panel-title-badge.graph{color:var(--graph)}
+  .grid-wrap{position:relative}
+  canvas#grid{display:block;width:100%;border-radius:6px;background:#0a0a0a}
+  .legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;font-size:10px;color:var(--text-dim)}
+  .legend-item{display:flex;align-items:center;gap:4px}
+  .legend-swatch{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:5px}
+  .metric{background:var(--surface2);border-radius:6px;padding:8px}
+  .metric-label{font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.3px}
+  .metric-value{font-size:16px;font-weight:500;margin-top:2px;font-variant-numeric:tabular-nums}
+  .chart-wrap{position:relative;height:110px}
+  canvas#chart{display:block;width:100%;height:100%}
+  .rule-current{font-family:monospace;font-size:11px;background:var(--surface2);padding:8px;
+    border-radius:5px;color:var(--accent);word-break:break-all;line-height:1.4}
+  .rules{max-height:160px;overflow-y:auto;font-family:monospace;font-size:10px}
+  .rule{display:flex;justify-content:space-between;align-items:center;padding:4px 0;
+    border-bottom:1px solid #1f1f1f;gap:6px}
+  .rule:last-child{border-bottom:none}
+  .rule-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rule-name.base{color:var(--text-dim)}
+  .rule-meta{color:var(--text-dim);white-space:nowrap;font-size:9px}
+  .rule-meta.use{color:var(--positive)}
+  .slider-row{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-dim);flex:1;margin-left:12px}
+  input[type="range"]{flex:1;accent-color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="widget">
+  <div class="header">
+    <div>
+      <h1>Budi-Core · Conflict Crystallization</h1>
+      <div class="subtitle">conflict_proto_v3 · 300 trials · paired seeds · flat / lifecycle / graph lygiagrečiai</div>
+    </div>
+    <div class="controls">
+      <button class="active" data-mode="flat">Flat</button>
+      <button data-mode="lifecycle">Lifecycle</button>
+      <button data-mode="graph">Graph</button>
+      <span style="width:6px"></span>
+      <button class="active" data-scenario="stationary">Stationary</button>
+      <button data-scenario="drift">Drift</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">
+      <span>World · <span id="scenario-label">Stationary (W2)</span> · <span id="trial-label">Trial 0 / 300</span></span>
+      <span class="panel-title-badge flat" id="active-mode-badge">flat</span>
+    </div>
+    <div class="grid-wrap"><canvas id="grid"></canvas></div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-swatch" style="background:rgba(80,227,137,0.35)"></div>world=true</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:rgba(255,76,69,0.30)"></div>world=false</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:transparent;border:2px solid #ff4c45"></div>prediction mismatch</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:transparent;border:2px solid #f5d77f;border-radius:50%"></div>conflict node</div>
+      <div class="legend-item" style="margin-left:auto;color:var(--flat)">▬ train domain (0–99)</div>
+      <div class="legend-item" style="color:var(--text-dim)">▬ extrapolation (100–299)</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Current best procedure (active mode)</div>
+    <div class="rule-current" id="best-rule">n%2==0</div>
+  </div>
+
+  <div class="metrics">
+    <div class="metric"><div class="metric-label">Cur acc</div><div class="metric-value" id="m-cur">—</div></div>
+    <div class="metric"><div class="metric-label">Extrap acc</div><div class="metric-value" id="m-extrap">—</div></div>
+    <div class="metric"><div class="metric-label">Train acc</div><div class="metric-value" id="m-train">—</div></div>
+    <div class="metric"><div class="metric-label">Pool</div><div class="metric-value" id="m-pool">—</div></div>
+    <div class="metric"><div class="metric-label">Grown</div><div class="metric-value" id="m-grown">—</div></div>
+    <div class="metric"><div class="metric-label">Conflicts</div><div class="metric-value" id="m-conflict">—</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">
+      <span>Accuracy over trials</span>
+      <span style="font-size:9px;color:var(--text-dim)">
+        <span style="color:var(--flat)">▬flat</span>
+        <span style="color:var(--lifecycle)">▬lifecycle</span>
+        <span style="color:var(--graph)">▬graph</span>
+        <span style="opacity:0.5">(dashed = extrap)</span>
+      </span>
+    </div>
+    <div class="chart-wrap"><canvas id="chart"></canvas></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Pool (active mode)</div>
+    <div class="rules" id="rules-list"></div>
+  </div>
+
+  <div class="panel">
+    <div class="controls" style="align-items:center">
+      <button class="primary" id="btn-play">Pause</button>
+      <button id="btn-step">Step</button>
+      <button id="btn-complete">Run to end</button>
+      <button id="btn-reset">Reset</button>
+      <div class="slider-row">
+        <span>Speed</span>
+        <input type="range" id="speed" min="1" max="20" value="4">
+        <span id="speed-val">4x</span>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="engine.js"></script>
+<script>
+'use strict';
+const { D, DOM, W2, W2B } = BudiEngine;
+const MAX_TRIALS = BudiEngine.CFG.trials, DRIFT_AT = BudiEngine.CFG.driftAt;
+const state = { activeMode: 'flat', scenario: 'stationary', running: true,
+                speed: 4, trialIndex: 0, seed: 42, modes: {} };
+let sim;
+
+function resetAll() {
+  sim = BudiEngine.createSim({ scenario: state.scenario, seed: state.seed });
+  state.modes = sim.modes;
+  state.trialIndex = 0;
+  updateAll();
+}
+function stepAll() {
+  if (sim.t >= MAX_TRIALS) return false;
+  sim.step();
+  state.trialIndex = sim.t;
+  return true;
+}
+
+// ─── Rendering ───
+const gridCanvas = document.getElementById('grid');
+const gridCtx = gridCanvas.getContext('2d');
+const chartCanvas = document.getElementById('chart');
+const chartCtx = chartCanvas.getContext('2d');
+
+const COLS = 25, ROWS = 12;
+
+function resizeCanvases() {
+  const dpr = window.devicePixelRatio || 1;
+  const gw = gridCanvas.clientWidth || 900;
+  const gh = Math.round(gw * ROWS / COLS);
+  if (gridCanvas.width !== Math.floor(gw * dpr) || gridCanvas.height !== Math.floor(gh * dpr)) {
+    gridCanvas.width = Math.floor(gw * dpr);
+    gridCanvas.height = Math.floor(gh * dpr);
+    gridCanvas.style.height = gh + 'px';
+  }
+  const cw = chartCanvas.clientWidth || 900;
+  const ch = 110;
+  if (chartCanvas.width !== Math.floor(cw * dpr) || chartCanvas.height !== Math.floor(ch * dpr)) {
+    chartCanvas.width = Math.floor(cw * dpr);
+    chartCanvas.height = Math.floor(ch * dpr);
+  }
+}
+
+function drawGrid() {
+  const dpr = window.devicePixelRatio || 1;
+  const W = gridCanvas.width / dpr, H = gridCanvas.height / dpr;
+  gridCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  gridCtx.clearRect(0, 0, W, H);
+
+  const cw = W / COLS, ch = H / ROWS;
+  const world = (state.scenario === 'drift' && state.trialIndex > DRIFT_AT) ? W2B : W2;
+  const s = state.modes[state.activeMode];
+  const bestP = s.bestP;
+  const conflicts = s.conflictNodes;
+
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const n = r * COLS + c;
+      const truth = world[n];
+      const pred = bestP.out[n];
+      const mismatch = truth !== pred;
+      const inTrain = r < 4;
+      const isConflict = conflicts.has(n);
+
+      // Background: world truth with dimming for extrap
+      const dimFactor = inTrain ? 1.0 : 0.6;
+      if (truth) {
+        gridCtx.fillStyle = `rgba(80, 227, 137, ${0.35 * dimFactor})`;
+      } else {
+        gridCtx.fillStyle = `rgba(255, 76, 69, ${0.30 * dimFactor})`;
+      }
+      gridCtx.fillRect(c * cw, r * ch, cw, ch);
+
+      // Mismatch border
+      if (mismatch) {
+        gridCtx.strokeStyle = 'rgba(255, 76, 69, 0.9)';
+        gridCtx.lineWidth = 2;
+        gridCtx.strokeRect(c * cw + 1, r * ch + 1, cw - 2, ch - 2);
+      }
+
+      // Conflict ring
+      if (isConflict) {
+        gridCtx.strokeStyle = 'rgba(245, 215, 127, 0.95)';
+        gridCtx.lineWidth = 1.5;
+        gridCtx.beginPath();
+        gridCtx.arc(c * cw + cw / 2, r * ch + ch / 2, Math.min(cw, ch) * 0.3, 0, Math.PI * 2);
+        gridCtx.stroke();
+      }
+    }
+  }
+
+  // Divider between train and extrap
+  gridCtx.strokeStyle = 'rgba(157, 210, 255, 0.7)';
+  gridCtx.lineWidth = 2;
+  gridCtx.setLineDash([6, 4]);
+  gridCtx.beginPath();
+  gridCtx.moveTo(0, 4 * ch);
+  gridCtx.lineTo(W, 4 * ch);
+  gridCtx.stroke();
+  gridCtx.setLineDash([]);
+
+  // Subtle grid lines every 25 (each row boundary is a W2 threshold)
+  gridCtx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+  gridCtx.lineWidth = 1;
+  for (let r = 0; r <= ROWS; r++) {
+    gridCtx.beginPath();
+    gridCtx.moveTo(0, r * ch);
+    gridCtx.lineTo(W, r * ch);
+    gridCtx.stroke();
+  }
+}
+
+function drawChart() {
+  const dpr = window.devicePixelRatio || 1;
+  const W = chartCanvas.width / dpr, H = chartCanvas.height / dpr;
+  chartCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  chartCtx.clearRect(0, 0, W, H);
+
+  const pad = { l: 30, r: 8, t: 8, b: 18 };
+  const pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+
+  // Axis
+  chartCtx.strokeStyle = 'rgba(255,255,255,0.15)';
+  chartCtx.lineWidth = 1;
+  chartCtx.beginPath();
+  chartCtx.moveTo(pad.l, pad.t);
+  chartCtx.lineTo(pad.l, pad.t + ph);
+  chartCtx.lineTo(pad.l + pw, pad.t + ph);
+  chartCtx.stroke();
+
+  // Y labels
+  chartCtx.fillStyle = 'rgba(255,255,255,0.4)';
+  chartCtx.font = '9px system-ui';
+  chartCtx.textAlign = 'right';
+  for (const v of [0, 0.5, 1]) {
+    const y = pad.t + ph - v * ph;
+    chartCtx.fillText(v.toFixed(1), pad.l - 4, y + 3);
+    chartCtx.strokeStyle = 'rgba(255,255,255,0.05)';
+    chartCtx.beginPath();
+    chartCtx.moveTo(pad.l, y);
+    chartCtx.lineTo(pad.l + pw, y);
+    chartCtx.stroke();
+  }
+
+  // Drift marker
+  if (state.scenario === 'drift') {
+    const x = pad.l + (DRIFT_AT / MAX_TRIALS) * pw;
+    chartCtx.strokeStyle = 'rgba(245, 215, 127, 0.5)';
+    chartCtx.setLineDash([3, 3]);
+    chartCtx.beginPath();
+    chartCtx.moveTo(x, pad.t);
+    chartCtx.lineTo(x, pad.t + ph);
+    chartCtx.stroke();
+    chartCtx.setLineDash([]);
+    chartCtx.fillStyle = 'rgba(245, 215, 127, 0.7)';
+    chartCtx.font = '9px system-ui';
+    chartCtx.textAlign = 'left';
+    chartCtx.fillText('drift', x + 3, pad.t + 10);
+  }
+
+  const colors = { flat: '#82c7ff', lifecycle: '#50e389', graph: '#d9ceff' };
+
+  for (const m of ['flat', 'lifecycle', 'graph']) {
+    const data = state.modes[m].metrics;
+    if (data.cur.length === 0) continue;
+
+    // Solid line: cur accuracy
+    chartCtx.strokeStyle = colors[m];
+    chartCtx.lineWidth = 1.8;
+    chartCtx.beginPath();
+    for (let i = 0; i < data.cur.length; i++) {
+      const x = pad.l + (i / (MAX_TRIALS - 1)) * pw;
+      const y = pad.t + ph - data.cur[i] * ph;
+      if (i === 0) chartCtx.moveTo(x, y); else chartCtx.lineTo(x, y);
+    }
+    chartCtx.stroke();
+
+    // Dashed line: extrap accuracy
+    chartCtx.strokeStyle = colors[m];
+    chartCtx.lineWidth = 1.4;
+    chartCtx.setLineDash([4, 3]);
+    chartCtx.globalAlpha = 0.75;
+    chartCtx.beginPath();
+    for (let i = 0; i < data.extrap.length; i++) {
+      const x = pad.l + (i / (MAX_TRIALS - 1)) * pw;
+      const y = pad.t + ph - data.extrap[i] * ph;
+      if (i === 0) chartCtx.moveTo(x, y); else chartCtx.lineTo(x, y);
+    }
+    chartCtx.stroke();
+    chartCtx.setLineDash([]);
+    chartCtx.globalAlpha = 1;
+  }
+
+  // X label
+  chartCtx.fillStyle = 'rgba(255,255,255,0.4)';
+  chartCtx.font = '9px system-ui';
+  chartCtx.textAlign = 'center';
+  chartCtx.fillText('trial 0', pad.l, H - 4);
+  chartCtx.fillText('150', pad.l + 0.5 * pw, H - 4);
+  chartCtx.fillText('299', pad.l + pw, H - 4);
+}
+
+function renderMetrics() {
+  const s = state.modes[state.activeMode];
+  const m = s.metrics;
+  const last = m.cur.length - 1;
+  const f = (v) => v == null ? '—' : v.toFixed(3);
+
+  document.getElementById('m-cur').textContent = last >= 0 ? f(m.cur[last]) : '—';
+  document.getElementById('m-extrap').textContent = last >= 0 ? f(m.extrap[last]) : '—';
+  document.getElementById('m-train').textContent = last >= 0 ? f(m.train[last]) : '—';
+  document.getElementById('m-pool').textContent = s.pool.length;
+  document.getElementById('m-grown').textContent = s.grown;
+  document.getElementById('m-conflict').textContent = s.conflictNodes.size;
+  document.getElementById('best-rule').textContent = s.bestP ? s.bestP.name : '—';
+  document.getElementById('trial-label').textContent = `Trial ${state.trialIndex} / ${MAX_TRIALS}`;
+  document.getElementById('scenario-label').textContent =
+    state.scenario === 'drift' ? `Drift (W2 → W2B at t=${DRIFT_AT})` : 'Stationary (W2)';
+
+  const badge = document.getElementById('active-mode-badge');
+  badge.textContent = state.activeMode;
+  badge.className = 'panel-title-badge ' + state.activeMode;
+}
+
+function renderPool() {
+  const s = state.modes[state.activeMode];
+  const list = document.getElementById('rules-list');
+  const sorted = s.pool.slice().sort((a, b) => {
+    if (a.base !== b.base) return a.base ? -1 : 1;
+    return b.use - a.use;
+  });
+  list.innerHTML = sorted.map(p => `
+    <div class="rule">
+      <span class="rule-name${p.base ? ' base' : ''}" title="${p.name}">${p.name}</span>
+      <span class="rule-meta">sz=${p.size}·d=${p.depth}</span>
+      <span class="rule-meta use">${p.use.toFixed(2)}</span>
+    </div>
+  `).join('');
+}
+
+function updateAll() {
+  resizeCanvases();
+  drawGrid();
+  drawChart();
+  renderMetrics();
+  renderPool();
+}
+
+// ─── Loop ───
+let _raf = null;
+let _acc = 0, _lastT = 0;
+
+function loop(ts) {
+  if (!_lastT) _lastT = ts;
+  const dt = Math.min(0.1, (ts - _lastT) / 1000);
+  _lastT = ts;
+
+  if (state.running && state.trialIndex < MAX_TRIALS) {
+    _acc += dt * state.speed * 4;
+    let steps = 0;
+    while (_acc >= 1 && state.trialIndex < MAX_TRIALS && steps < 10) {
+      stepAll();
+      _acc -= 1;
+      steps++;
+    }
+    updateAll();
+  }
+
+  if (state.trialIndex >= MAX_TRIALS && state.running) {
+    state.running = false;
+    document.getElementById('btn-play').textContent = 'Run';
+    document.getElementById('btn-play').classList.remove('primary');
+  }
+  _raf = requestAnimationFrame(loop);
+}
+
+// ─── Controls ───
+document.querySelectorAll('[data-mode]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-mode]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.activeMode = btn.dataset.mode;
+    updateAll();
+  });
+});
+
+document.querySelectorAll('[data-scenario]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-scenario]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.scenario = btn.dataset.scenario;
+    resetAll();
+  });
+});
+
+document.getElementById('btn-play').addEventListener('click', () => {
+  if (state.trialIndex >= MAX_TRIALS) resetAll();
+  state.running = !state.running;
+  const b = document.getElementById('btn-play');
+  b.textContent = state.running ? 'Pause' : 'Run';
+  b.classList.toggle('primary', state.running);
+});
+
+document.getElementById('btn-step').addEventListener('click', () => {
+  state.running = false;
+  document.getElementById('btn-play').textContent = 'Run';
+  document.getElementById('btn-play').classList.remove('primary');
+  if (state.trialIndex < MAX_TRIALS) {
+    stepAll();
+    updateAll();
+  }
+});
+
+document.getElementById('btn-complete').addEventListener('click', () => {
+  state.running = false;
+  document.getElementById('btn-play').textContent = 'Run';
+  document.getElementById('btn-play').classList.remove('primary');
+  while (state.trialIndex < MAX_TRIALS) stepAll();
+  updateAll();
+});
+
+document.getElementById('btn-reset').addEventListener('click', resetAll);
+
+document.getElementById('speed').addEventListener('input', e => {
+  state.speed = parseInt(e.target.value, 10);
+  document.getElementById('speed-val').textContent = `${state.speed}x`;
+});
+
+window.addEventListener('resize', updateAll);
+
+// ─── Boot ───
+resetAll();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

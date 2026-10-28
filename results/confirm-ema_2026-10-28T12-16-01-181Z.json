@@ -1,0 +1,439 @@
+{
+ "tag": "confirm-ema",
+ "seeds": 100,
+ "offset": 100,
+ "alpha": 0.002380952380952381,
+ "results": [
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0",
+   "contrast": "graph − lifecycle",
+   "mean": 0.027312000000000395,
+   "lo": 0.012965333333333606,
+   "hi": 0.041798666666667275,
+   "wins": 74,
+   "losses": 19,
+   "n": 100,
+   "sig": true
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0",
+   "contrast": "lifecycle − flat",
+   "mean": 0.002116000000000263,
+   "lo": -0.009201999999999903,
+   "hi": 0.013294666666667416,
+   "wins": 47,
+   "losses": 47,
+   "n": 100,
+   "sig": false
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0",
+   "contrast": "graph − flat",
+   "mean": 0.02942800000000064,
+   "lo": 0.01663333333333354,
+   "hi": 0.04116400000000054,
+   "wins": 75,
+   "losses": 21,
+   "n": 100,
+   "sig": true
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0",
+   "contrast": "flat: ema=0 − ema=0.7",
+   "mean": 0,
+   "lo": 0,
+   "hi": 0,
+   "wins": 0,
+   "losses": 0,
+   "n": 100,
+   "sig": false
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0",
+   "contrast": "lifecycle: ema=0 − ema=0.7",
+   "mean": 0,
+   "lo": 0,
+   "hi": 0,
+   "wins": 0,
+   "losses": 0,
+   "n": 100,
+   "sig": false
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0",
+   "contrast": "graph: ema=0 − ema=0.7",
+   "mean": -0.0025313333333328502,
+   "lo": -0.014495333333332826,
+   "hi": 0.008930666666667421,
+   "wins": 39,
+   "losses": 31,
+   "n": 100,
+   "sig": false
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.3",
+   "contrast": "graph − lifecycle",
+   "mean": 0.024994000000000138,
+   "lo": 0.009381333333333068,
+   "hi": 0.03959333333333365,
+   "wins": 72,
+   "losses": 20,
+   "n": 100,
+   "sig": true
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.3",
+   "contrast": "lifecycle − flat",
+   "mean": 0.002116000000000263,
+   "lo": -0.009613333333333583,
+   "hi": 0.01333200000000043,
+   "wins": 47,
+   "losses": 47,
+   "n": 100,
+   "sig": false
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.3",
+   "contrast": "graph − flat",
+   "mean": 0.0271100000000004,
+   "lo": 0.012773333333333312,
+   "hi": 0.040871333333333856,
+   "wins": 68,
+   "losses": 29,
+   "n": 100,
+   "sig": true
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.3",
+   "contrast": "flat: ema=0.3 − ema=0.7",
+   "mean": 0,
+   "lo": 0,
+   "hi": 0,
+   "wins": 0,
+   "losses": 0,
+   "n": 100,
+   "sig": false
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.3",
+   "contrast": "lifecycle: ema=0.3 − ema=0.7",
+   "mean": 0,
+   "lo": 0,
+   "hi": 0,
+   "wins": 0,
+   "losses": 0,
+   "n": 100,
+   "sig": false
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.3",
+   "contrast": "graph: ema=0.3 − ema=0.7",
+   "mean": -0.004849333333333095,
+   "lo": -0.01721199999999982,
+   "hi": 0.006191333333333663,
+   "wins": 32,
+   "losses": 33,
+   "n": 100,
+   "sig": false
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.7",
+   "contrast": "graph − lifecycle",
+   "mean": 0.029843333333333225,
+   "lo": 0.01510799999999949,
+   "hi": 0.04541533333333359,
+   "wins": 71,
+   "losses": 19,
+   "n": 100,
+   "sig": true
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.7",
+   "contrast": "lifecycle − flat",
+   "mean": 0.002116000000000263,
+   "lo": -0.009512666666666923,
+   "hi": 0.013362666666666996,
+   "wins": 47,
+   "losses": 47,
+   "n": 100,
+   "sig": false
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.7",
+   "contrast": "graph − flat",
+   "mean": 0.031959333333333485,
+   "lo": 0.018637333333333183,
+   "hi": 0.04516933333333391,
+   "wins": 71,
+   "losses": 24,
+   "n": 100,
+   "sig": true
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.9",
+   "contrast": "graph − lifecycle",
+   "mean": 0.03464333333333344,
+   "lo": 0.020701333333333256,
+   "hi": 0.048316000000000366,
+   "wins": 73,
+   "losses": 18,
+   "n": 100,
+   "sig": true
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.9",
+   "contrast": "lifecycle − flat",
+   "mean": 0.002116000000000263,
+   "lo": -0.009279333333333658,
+   "hi": 0.013541333333333669,
+   "wins": 47,
+   "losses": 47,
+   "n": 100,
+   "sig": false
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.9",
+   "contrast": "graph − flat",
+   "mean": 0.03675933333333368,
+   "lo": 0.02446400000000015,
+   "hi": 0.04874600000000038,
+   "wins": 79,
+   "losses": 17,
+   "n": 100,
+   "sig": true
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.9",
+   "contrast": "flat: ema=0.9 − ema=0.7",
+   "mean": 0,
+   "lo": 0,
+   "hi": 0,
+   "wins": 0,
+   "losses": 0,
+   "n": 100,
+   "sig": false
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.9",
+   "contrast": "lifecycle: ema=0.9 − ema=0.7",
+   "mean": 0,
+   "lo": 0,
+   "hi": 0,
+   "wins": 0,
+   "losses": 0,
+   "n": 100,
+   "sig": false
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.9",
+   "contrast": "graph: ema=0.9 − ema=0.7",
+   "mean": 0.004800000000000204,
+   "lo": -0.007230666666666736,
+   "hi": 0.016433333333333747,
+   "wins": 41,
+   "losses": 29,
+   "n": 100,
+   "sig": false
+  }
+ ],
+ "checks": [
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0",
+   "maxAbs": 0
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.3",
+   "maxAbs": 0
+  },
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "variant": "ema=0.9",
+   "maxAbs": 0
+  }
+ ],
+ "diags": [
+  {
+   "exp": "ema",
+   "scenario": "drift",
+   "noise": 0,
+   "drift": "W2B",
+   "diag": {
+    "ema=0": {
+     "flat": {
+      "pool": 10,
+      "csize": 30.161199999999997,
+      "extrap": 0.9928680000000004,
+      "grown": 11.67
+     },
+     "lifecycle": {
+      "pool": 5.946399999999999,
+      "csize": 15.918759999999999,
+      "extrap": 0.9886809999999997,
+      "grown": 7.75
+     },
+     "graph": {
+      "pool": 5.7062,
+      "csize": 11.841740000000001,
+      "extrap": 0.980674,
+      "grown": 8.6
+     }
+    },
+    "ema=0.3": {
+     "flat": {
+      "pool": 10,
+      "csize": 30.161199999999997,
+      "extrap": 0.9928680000000004,
+      "grown": 11.67
+     },
+     "lifecycle": {
+      "pool": 5.946399999999999,
+      "csize": 15.918759999999999,
+      "extrap": 0.9886809999999997,
+      "grown": 7.75
+     },
+     "graph": {
+      "pool": 5.852200000000002,
+      "csize": 11.43871,
+      "extrap": 0.9679980000000001,
+      "grown": 8.59
+     }
+    },
+    "ema=0.7": {
+     "flat": {
+      "pool": 10,
+      "csize": 30.161199999999997,
+      "extrap": 0.9928680000000004,
+      "grown": 11.67
+     },
+     "lifecycle": {
+      "pool": 5.946399999999999,
+      "csize": 15.918759999999999,
+      "extrap": 0.9886809999999997,
+      "grown": 7.75
+     },
+     "graph": {
+      "pool": 5.7034,
+      "csize": 12.2411,
+      "extrap": 0.963088,
+      "grown": 8.96
+     }
+    },
+    "ema=0.9": {
+     "flat": {
+      "pool": 10,
+      "csize": 30.161199999999997,
+      "extrap": 0.9928680000000004,
+      "grown": 11.67
+     },
+     "lifecycle": {
+      "pool": 5.946399999999999,
+      "csize": 15.918759999999999,
+      "extrap": 0.9886809999999997,
+      "grown": 7.75
+     },
+     "graph": {
+      "pool": 5.511800000000001,
+      "csize": 11.834730000000004,
+      "extrap": 0.9755479999999999,
+      "grown": 9.77
+     }
+    }
+   }
+  }
+ ]
+}
